@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>QR Scan</title>
+		<script src="qrcode.min.js" defer></script>
+		<script src="index.js" type="module" defer></script>
+		<style>
+			:root {
+				background-color: #1e1e2e;
+				color: #cdd6f4;
+
+				font-family: "Hack", system-ui, sans-serif;
+			}
+			@media (prefers-color-scheme: light) {
+				:root {
+					background-color: #eff1f5;
+					color: #4c4f69;
+				}
+			}
+
+			#main {
+				text-align: center;
+			}
+
+			#qrcode {
+				padding: 1rem;
+				background-color: white;
+				color: black;
+				width: max-content;
+				margin: auto;
+			}
+			#qrcode * {
+				image-rendering: pixelated;
+				max-width: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<h1>{{ "scanHeader" | i18n }}</h1>
+			<div id="qrcode"></div>
+		</div>
+	</body>
+</html>

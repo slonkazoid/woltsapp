@@ -1,0 +1,6 @@
+[submodule "node-qrcode"]
+	path = node-qrcode
+	url = https://github.com/soldair/node-qrcode
+[submodule "qrcodejs"]
+	path = qrcodejs
+	url = https://github.com/davidshimjs/qrcodejs
