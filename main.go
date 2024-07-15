@@ -56,6 +56,7 @@ func main() {
 	loginLog := waLog.Stdout("Login", logLevel, true)
 	dbLog := waLog.Stdout("Database", logLevel, true)
 	clientLog := waLog.Stdout("Client", logLevel, true)
+	qrLog := waLog.Stdout("QR Server", logLevel, true)
 
 	mainLog.Infof("starting up")
 
@@ -74,7 +75,7 @@ func main() {
 	var client *whatsmeow.Client
 
 loginStart:
-	client, err = Login(loginLog, clientLog, container)
+	client, err = Login(loginLog, clientLog, qrLog, container)
 	if err == LoginTimeout {
 		mainLog.Errorf("%s, retrying after 5 seconds...", err)
 		time.Sleep(5 * time.Second)

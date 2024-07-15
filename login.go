@@ -55,7 +55,7 @@ func initWhatsapp(clientLog waLog.Logger, container *sqlstore.Container, cQr cha
 	cRet <- client
 }
 
-func Login(loginLog waLog.Logger, clientLog waLog.Logger, container *sqlstore.Container) (*whatsmeow.Client, error) {
+func Login(loginLog waLog.Logger, clientLog waLog.Logger, qrLog waLog.Logger, container *sqlstore.Container) (*whatsmeow.Client, error) {
 	cQr := make(chan string, 1)
 	cLoggedIn := make(chan struct{})
 	cClient := make(chan *whatsmeow.Client)
@@ -65,7 +65,7 @@ func Login(loginLog waLog.Logger, clientLog waLog.Logger, container *sqlstore.Co
 	case qr := <-cQr:
 		loginLog.Debugf("received qr before loggedIn")
 		cSrv := make(chan *http.Server, 1)
-		go QrServer(qr, cQr, cSrv)
+		go QrServer(qrLog, qr, cQr, cSrv)
 		srv := <-cSrv
 		addr, _ := net.ResolveTCPAddr("tcp", srv.Addr)
 		var ip string

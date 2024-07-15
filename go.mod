@@ -17,4 +17,5 @@ require (
 	golang.org/x/net v0.27.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
+	nhooyr.io/websocket v1.8.11 // indirect
 )
