@@ -36,12 +36,5 @@ async function fetchAndRender() {
 	}
 }
 
-//await fetchAndRender();
-//setInterval(fetchAndRender, 1000);
-
-new QRCode(document.getElementById("qrcode"), {
-	text: "a".repeat(179),
-	width: 512,
-	height: 512,
-	correctLevel: QRCode.CorrectLevel.M,
-});
+await fetchAndRender();
+setInterval(fetchAndRender, 1000);
