@@ -82,6 +82,7 @@ func Login(loginLog waLog.Logger, clientLog waLog.Logger, container *sqlstore.Co
 		shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), 10*time.Second)
 		defer shutdownRelease()
 		srv.Shutdown(shutdownCtx)
+		close(cQr)
 	case <-cLoggedIn:
 		loginLog.Debugf("received loggedIn before qr")
 	}

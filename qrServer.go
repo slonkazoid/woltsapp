@@ -19,7 +19,11 @@ var currentQr string
 
 func listenToQrChanges(cQr chan string) {
 	for {
-		currentQr = <-cQr
+		val := <-cQr
+		if val == "" {
+			return
+		}
+		currentQr = val
 	}
 }
 
