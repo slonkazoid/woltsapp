@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"encoding/json"
 	"html/template"
 	"io/fs"
 	"net/http"
@@ -18,6 +19,16 @@ var staticEmbed embed.FS
 var tepmlatesEmbed embed.FS
 
 var currentQr string
+
+/*
+ID   MEANING
+0    QR update
+1    Close
+*/
+type message struct {
+	Id   int    `json:"id"`
+	Body string `json:"body"`
+}
 
 func listenToQrChanges(cQr chan string, cClients chan chan string) {
 	clients := make([]chan string, 0)
@@ -81,7 +92,14 @@ func QrServer(log waLog.Logger, qr string, cQr chan string, cSrv chan *http.Serv
 
 		log.Debugf("got new client %s", r.RemoteAddr)
 
-		c.Write(r.Context(), websocket.MessageText, []byte(currentQr))
+		jsonBody, jsonErr := json.Marshal(message{
+			Id:   0,
+			Body: currentQr,
+		})
+		if jsonErr != nil {
+			panic(jsonErr)
+		}
+		c.Write(r.Context(), websocket.MessageText, jsonBody)
 
 		thisChannel := make(chan string)
 		cClients <- thisChannel
@@ -91,9 +109,18 @@ func QrServer(log waLog.Logger, qr string, cQr chan string, cSrv chan *http.Serv
 		for {
 			val := <-thisChannel
 			if val == "" {
+				jsonBody, _ = json.Marshal(message{
+					Id:   1,
+					Body: "",
+				})
+				c.Write(r.Context(), websocket.MessageText, jsonBody)
 				return
 			}
-			c.Write(r.Context(), websocket.MessageText, []byte(val))
+			jsonBody, _ = json.Marshal(message{
+				Id:   0,
+				Body: val,
+			})
+			c.Write(r.Context(), websocket.MessageText, jsonBody)
 		}
 	})
 

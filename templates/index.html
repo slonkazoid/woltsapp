@@ -26,20 +26,22 @@
 
 			#qrcode {
 				padding: 1rem;
+			}
+
+			#qrcode * {
+				padding: 1rem;
 				background-color: white;
 				color: black;
-				width: max-content;
-				margin: auto;
-			}
-			#qrcode * {
 				image-rendering: pixelated;
-				max-width: 100%;
+				max-width: calc(100% - 2rem);
+				margin: auto;
 			}
 		</style>
 	</head>
 	<body>
 		<div id="main">
-			<h1>{{ "scanHeader" | i18n }}</h1>
+			<h1 id="done" style="display: none">{{ "done" | i18n }}</h1>
+			<h1 id="header">{{ "scanHeader" | i18n }}</h1>
 			<div id="qrcode"></div>
 		</div>
 	</body>
