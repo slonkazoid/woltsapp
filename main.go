@@ -37,7 +37,7 @@ func initI18n(lang string) {
 	}
 }
 
-func loop(mainLog waLog.Logger, loginLog waLog.Logger, clientLog waLog.Logger, qrLog waLog.Logger, container *sqlstore.Container) {
+func bot(mainLog waLog.Logger, loginLog waLog.Logger, clientLog waLog.Logger, qrLog waLog.Logger, container *sqlstore.Container) {
 	client, err := Login(loginLog, clientLog, qrLog, container)
 	if err == LoginTimeout {
 		mainLog.Errorf("%s, retrying after 5 seconds...", err)
@@ -104,6 +104,6 @@ func main() {
 	dbLog.Infof("database ready")
 
 	for {
-		loop(mainLog, loginLog, clientLog, qrLog, container)
+		bot(mainLog, loginLog, clientLog, qrLog, container)
 	}
 }
