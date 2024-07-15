@@ -8,18 +8,15 @@ import (
 	"net/http"
 	"time"
 
-	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store/sqlstore"
 	waLog "go.mau.fi/whatsmeow/util/log"
 )
 
-func initWhatsapp(dbLog waLog.Logger, clientLog waLog.Logger, cQr chan string, cLoggedIn chan struct{}, cRet chan *whatsmeow.Client) {
-	// Make sure you add appropriate DB connector imports, e.g. github.com/mattn/go-sqlite3 for SQLite
-	container, err := sqlstore.New("sqlite3", "file:store.db?_foreign_keys=on&_journal_mode=WAL", dbLog)
-	if err != nil {
-		panic(err)
-	}
+var LoginTimeout error = errors.New("didn't login in time")
+
+// Code from whatsmeow docs
+func initWhatsapp(clientLog waLog.Logger, container *sqlstore.Container, cQr chan string, cLoggedIn chan struct{}, cRet chan *whatsmeow.Client) {
 	// If you want multiple sessions, remember their JIDs and use .GetDevice(jid) or .GetAllDevices() instead.
 	deviceStore, err := container.GetFirstDevice()
 	if err != nil {
@@ -58,11 +55,11 @@ func initWhatsapp(dbLog waLog.Logger, clientLog waLog.Logger, cQr chan string, c
 	cRet <- client
 }
 
-func Login(loginLog waLog.Logger, dbLog waLog.Logger, clientLog waLog.Logger) (*whatsmeow.Client, error) {
+func Login(loginLog waLog.Logger, clientLog waLog.Logger, container *sqlstore.Container) (*whatsmeow.Client, error) {
 	cQr := make(chan string, 1)
 	cLoggedIn := make(chan struct{})
 	cClient := make(chan *whatsmeow.Client)
-	go initWhatsapp(dbLog, clientLog, cQr, cLoggedIn, cClient)
+	go initWhatsapp(clientLog, container, cQr, cLoggedIn, cClient)
 
 	select {
 	case qr := <-cQr:
@@ -92,7 +89,7 @@ func Login(loginLog waLog.Logger, dbLog waLog.Logger, clientLog waLog.Logger) (*
 	client := <-cClient
 
 	if !client.IsConnected() {
-		return &whatsmeow.Client{}, errors.New("didn't login in time")
+		return &whatsmeow.Client{}, LoginTimeout
 	}
 
 	return client, nil

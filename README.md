@@ -14,5 +14,7 @@ go build .
 
 configuration is done via environment variables
 
-- `WOLTSAPP_LANG`: frontend and bot language
-- `WOLTSAPP_HTTP_ADDR`: qr login server bind address
+- `LOG_LEVEL`: minimum log level, one of `DEBUG`, `INFO`, `WARN`, `ERROR`
+(default: `INFO`)
+- `WOLTSAPP_LANG`: frontend and bot language (default: `en`)
+- `WOLTSAPP_HTTP_ADDR`: qr login server bind address (default: `:8000`)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"embed"
 	"encoding/json"
 	"fmt"
@@ -11,6 +12,8 @@ import (
 
 	"go.mau.fi/whatsmeow"
 	//"go.mau.fi/whatsmeow/types/events"
+	_ "github.com/mattn/go-sqlite3"
+	"go.mau.fi/whatsmeow/store/sqlstore"
 	waLog "go.mau.fi/whatsmeow/util/log"
 )
 
@@ -56,15 +59,28 @@ func main() {
 
 	mainLog.Infof("starting up")
 
+	db, err := sql.Open("sqlite3", "file:store.db?_foreign_keys=on&_journal_mode=WAL")
+	if err != nil {
+		panic(err)
+	}
+
+	dbLog.Debugf("connected to database")
+
+	container := sqlstore.NewWithDB(db, "sqlite3", dbLog)
+	container.Upgrade()
+
+	dbLog.Infof("database ready")
+
 	var client *whatsmeow.Client
-	var err error
 
 loginStart:
-	client, err = Login(loginLog, dbLog, clientLog)
-	if err != nil {
-		mainLog.Errorf("couldn't log in: %s, retrying after 5 seconds...", err)
+	client, err = Login(loginLog, clientLog, container)
+	if err == LoginTimeout {
+		mainLog.Errorf("%s, retrying after 5 seconds...", err)
 		time.Sleep(5 * time.Second)
 		goto loginStart
+	} else if err != nil {
+		panic(err)
 	}
 
 	mainLog.Infof("initialized")
