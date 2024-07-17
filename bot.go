@@ -10,7 +10,6 @@ import (
 )
 
 func Bot(mainLog waLog.Logger, loginLog waLog.Logger, clientLog waLog.Logger, qrLog waLog.Logger, container *sqlstore.Container) {
-
 	client, err := Login(loginLog, clientLog, qrLog, container)
 	if err == LoginTimeout {
 		mainLog.Errorf("%s, retrying after 5 seconds...", err)
@@ -25,12 +24,16 @@ func Bot(mainLog waLog.Logger, loginLog waLog.Logger, clientLog waLog.Logger, qr
 	cRestart := make(chan struct{})
 
 	client.AddEventHandler(func(evt interface{}) {
-		mainLog.Debugf("got event %v", evt)
+		mainLog.Debugf("got event %T", evt)
 		switch evt.(type) {
-		case events.PermanentDisconnect:
-			mainLog.Warnf("permanent disconnect, retrying...")
-			cRestart <- struct{}{}
-		case events.LoggedOut:
+		case *events.Message:
+			message := evt.(*events.Message)
+			chat := message.Info.Chat.String()
+			mainLog.Infof("got message in %s", chat)
+			if chat == "" {
+				mainLog.Debugf("got message in bot group: %v", message)
+			}
+		case *events.LoggedOut:
 			mainLog.Warnf("logged out, retrying...")
 			cRestart <- struct{}{}
 		}
