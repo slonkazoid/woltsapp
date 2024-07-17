@@ -66,7 +66,6 @@ function main() {
 		}
 	};
 	ws.onerror = (event) => {
-		alert("couldn't connect to server:" + event);
 		console.error("ws error:", event);
 	};
 	ws.onclose = (event) => {
