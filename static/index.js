@@ -10,6 +10,7 @@ const done = document.getElementById("done");
 
 let lastQrData;
 let lastQr;
+let loggedIn = false;
 
 function processQr(text) {
 	if (lastQrData === text) return; // no change
@@ -33,7 +34,7 @@ function processQr(text) {
 	}
 }
 
-try {
+function main() {
 	let ws = new WebSocket("/code");
 	ws.onmessage = (event) => {
 		/** @type {Message} */
@@ -58,12 +59,23 @@ try {
 				qrcode.style.opacity = "50%";
 				qrcode.style.cursor = "not-allowed";
 				done.style.display = "block";
+				loggedIn = true;
 
 				ws.close();
 				break;
 		}
 	};
-} catch (err) {
-	alert("couldn't connect to server: " + err.message);
-	console.error(err);
+	ws.onerror = (event) => {
+		alert("couldn't connect to server:" + event);
+		console.error("ws error:", event);
+	};
+	ws.onclose = (event) => {
+		console.log("ws close:", event);
+		if (!loggedIn) {
+			console.warn("websocket closed before logged in, reconnecting in 5 seconds...");
+			setTimeout(main, 5000);
+		}
+	};
 }
+
+main();

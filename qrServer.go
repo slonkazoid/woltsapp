@@ -89,6 +89,7 @@ func QrServer(log waLog.Logger, qr string, cQr chan string, cSrv chan *http.Serv
 			return
 		}
 		defer c.CloseNow()
+		defer log.Debugf("dropped client %s", r.RemoteAddr)
 
 		log.Debugf("got new client %s", r.RemoteAddr)
 
@@ -99,7 +100,10 @@ func QrServer(log waLog.Logger, qr string, cQr chan string, cSrv chan *http.Serv
 		if jsonErr != nil {
 			panic(jsonErr)
 		}
-		c.Write(r.Context(), websocket.MessageText, jsonBody)
+		err = c.Write(r.Context(), websocket.MessageText, jsonBody)
+		if err != nil {
+			return
+		}
 
 		thisChannel := make(chan string)
 		cClients <- thisChannel
@@ -120,7 +124,10 @@ func QrServer(log waLog.Logger, qr string, cQr chan string, cSrv chan *http.Serv
 				Id:   0,
 				Body: val,
 			})
-			c.Write(r.Context(), websocket.MessageText, jsonBody)
+			err = c.Write(r.Context(), websocket.MessageText, jsonBody)
+			if err != nil {
+				return
+			}
 		}
 	})
 
