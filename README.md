@@ -12,9 +12,10 @@ go build .
 
 ## Configuration
 
-configuration is done via environment variables
+configuration is done via environment variables and command line arguments,
+with the exception of LOG_LEVEL:
 
-- `LOG_LEVEL`: minimum log level, one of `DEBUG`, `INFO`, `WARN`, `ERROR`
+`LOG_LEVEL`: minimum log level, one of `DEBUG`, `INFO`, `WARN`, `ERROR`
 (default: `INFO`)
-- `WOLTSAPP_LANG`: frontend and bot language (default: `en`)
-- `WOLTSAPP_HTTP_ADDR`: qr login server bind address (default: `:8000`)
+
+see `woltsapp -help` for more information

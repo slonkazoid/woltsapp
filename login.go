@@ -3,8 +3,6 @@ package main
 import (
 	"context"
 	"errors"
-	"fmt"
-	"net"
 	"net/http"
 	"time"
 
@@ -67,16 +65,8 @@ func Login(loginLog waLog.Logger, clientLog waLog.Logger, qrLog waLog.Logger, co
 		cSrv := make(chan *http.Server, 1)
 		go QrServer(qrLog, qr, cQr, cSrv)
 		srv := <-cSrv
-		addr, _ := net.ResolveTCPAddr("tcp", srv.Addr)
-		var ip string
-		if addr.IP == nil {
-			ip = "0.0.0.0"
-		} else if addr.IP.To4() == nil {
-			ip = fmt.Sprintf("[%s]", addr.IP.String())
-		} else {
-			ip = addr.IP.String()
-		}
-		loginLog.Infof("scan QR here: http://%s:%d", ip, addr.Port)
+		addr, _ := FormatHttpAddr(srv.Addr)
+		loginLog.Infof("scan QR here: %s", addr)
 		loginLog.Infof("waiting for QR to be scanned")
 		<-cLoggedIn
 		shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), 10*time.Second)

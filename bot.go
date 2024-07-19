@@ -9,7 +9,7 @@ import (
 	waLog "go.mau.fi/whatsmeow/util/log"
 )
 
-func Bot(mainLog waLog.Logger, loginLog waLog.Logger, clientLog waLog.Logger, qrLog waLog.Logger, container *sqlstore.Container) {
+func Bot(mainLog waLog.Logger, loginLog waLog.Logger, clientLog waLog.Logger, qrLog waLog.Logger, container *sqlstore.Container, config *Config) {
 	client, err := Login(loginLog, clientLog, qrLog, container)
 	if err == LoginTimeout {
 		mainLog.Errorf("%s, retrying after 5 seconds...", err)
@@ -18,6 +18,9 @@ func Bot(mainLog waLog.Logger, loginLog waLog.Logger, clientLog waLog.Logger, qr
 	} else if err != nil {
 		panic(err)
 	}
+
+	defer client.RemoveEventHandlers()
+	defer client.Disconnect()
 
 	mainLog.Infof("initialized")
 
@@ -28,10 +31,17 @@ func Bot(mainLog waLog.Logger, loginLog waLog.Logger, clientLog waLog.Logger, qr
 		switch evt.(type) {
 		case *events.Message:
 			message := evt.(*events.Message)
+			if message.IsEdit {
+				return
+			}
+			contents := message.Message.GetConversation()
+			if contents == "" {
+				return
+			}
 			chat := message.Info.Chat.String()
-			mainLog.Infof("got message in %s", chat)
-			if chat == "" {
-				mainLog.Debugf("got message in bot group: %v", message)
+			mainLog.Debugf("got message in %s: %s", chat, contents)
+			if chat == config.Group_ID {
+				mainLog.Infof("got message in bot group: %s", contents)
 			}
 		case *events.LoggedOut:
 			mainLog.Warnf("logged out, retrying...")
@@ -42,7 +52,4 @@ func Bot(mainLog waLog.Logger, loginLog waLog.Logger, clientLog waLog.Logger, qr
 	_ = <-cRestart
 
 	mainLog.Infof("restarting...")
-
-	client.RemoveEventHandlers()
-	client.Disconnect()
 }
