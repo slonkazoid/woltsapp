@@ -7,6 +7,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/sqlite3"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
 	"github.com/koding/multiconfig"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow/store/sqlstore"
@@ -17,6 +20,11 @@ var I18n func(key string) string
 
 //go:embed i18n
 var i18nEmbed embed.FS
+
+//go:embed migrate
+var migrateEmbed embed.FS
+
+type SqlDB sql.DB
 
 type Config struct {
 	HTTP_Addr string `default:":8000"`
@@ -71,20 +79,41 @@ func main() {
 
 	mainLog.Infof("starting up")
 
-	var db *sql.DB
-	db, err = sql.Open("sqlite3", config.DB_URL)
+	db, err := sql.Open("sqlite3", config.DB_URL)
 	if err != nil {
 		panic(err)
 	}
 
 	dbLog.Debugf("connected to database")
 
-	container := sqlstore.NewWithDB(db, "sqlite3", dbLog)
-	container.Upgrade()
+	iodriver, err := iofs.New(migrateEmbed, "migrate")
+	if err != nil {
+		panic(err)
+	}
+	dbdriver, err := sqlite3.WithInstance(db, &sqlite3.Config{})
+	if err != nil {
+		panic(err)
+	}
+	migrations, err := migrate.NewWithInstance(
+		"migrateEmbed", iodriver,
+		"store", dbdriver)
+	if err != nil {
+		panic(err)
+	}
+	err = migrations.Up()
+	if err != nil {
+		panic(err)
+	}
 
-	dbLog.Infof("database ready")
+	container := sqlstore.NewWithDB(db, "sqlite3", dbLog)
+	err = container.Upgrade()
+	if err != nil {
+		panic(err)
+	}
+
+	dbLog.Infof("database up")
 
 	for {
-		Bot(mainLog, loginLog, clientLog, qrLog, container, config)
+		Bot(mainLog, loginLog, clientLog, qrLog, (*SqlDB)(db), container, config)
 	}
 }
