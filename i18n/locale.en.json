@@ -1,4 +1,10 @@
 {
 	"scanHeader": "Scan the QR code below in WhatsApp",
-	"done": "Logged in"
+	"done": "Logged in",
+	"commandNotFound": "Command not found",
+	"commandError": "Error while executing command",
+	"groupExists": "Group is already added",
+	"groupAdded": "Group added",
+	"groupNotFound": "Group not found",
+	"groupRemoved": "Group removed"
 }

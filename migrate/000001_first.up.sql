@@ -1,6 +1,5 @@
-CREATE TABLE allowed_users (
-	phone_no TEXT UNIQUE NOT NULL,
-	permission_level INTEGER NOT NULL
+CREATE TABLE groups (
+	id TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE defined_hosts (

@@ -1,4 +1,10 @@
 {
 	"scanHeader": "Aşağıdaki QR kodunu WhatsApp'ta okutunuz",
-	"done": "Giriş yapıldı"
+	"done": "Giriş yapıldı",
+	"commandNotFound": "Komut bulunamadı",
+	"commandError": "Komut çalıştırılırken hata oluştu",
+	"groupExists": "Grup zaten eklendi",
+	"groupAdded": "Grup eklendi",
+	"groupNotFound": "Group bulunamadı",
+	"groupRemoved": "Group kaldırıldı"
 }

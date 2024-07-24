@@ -68,7 +68,7 @@ func QrServer(log waLog.Logger, qr string, cQr chan string, cSrv chan *http.Serv
 	server := &http.Server{Addr: addr, Handler: mux}
 
 	indexTemplate, err := template.New("index.html").Funcs(template.FuncMap{
-		"i18n": I18n,
+		"i18n": I18nFormat,
 	}).ParseFS(tepmlatesEmbed, "templates/index.html")
 	if err != nil {
 		panic(err)

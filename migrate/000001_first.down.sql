@@ -1,2 +1,2 @@
-DROP TABLE allowed_users;
+DROP TABLE groups;
 DROP TABLE defined_hosts;

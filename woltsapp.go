@@ -5,18 +5,21 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
-	"github.com/koding/multiconfig"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow/store/sqlstore"
 	waLog "go.mau.fi/whatsmeow/util/log"
 )
 
-var I18n func(key string) string
+type SqlDB sql.DB
+
+var I18nFormat func(key string) string
+var I18nLookupCommand func(key string) string
 
 //go:embed i18n
 var i18nEmbed embed.FS
@@ -24,31 +27,34 @@ var i18nEmbed embed.FS
 //go:embed migrate
 var migrateEmbed embed.FS
 
-type SqlDB sql.DB
-
-type Config struct {
-	HTTP_Addr string `default:":8000"`
-	Lang      string `default:"en"`
-	Group_ID  string
-	DB_URL    string `default:"file:store.db?_foreign_keys=on&_journal_mode=WAL"`
-}
-
-func LoadConfig() (*Config, error) {
-	m := multiconfig.New()
-	config := new(Config)
-	err := m.Load(config)
-	return config, err
-}
+var RandSource io.Reader
 
 func initI18n(lang string) {
 	var locale map[string]string
 	file, err := i18nEmbed.ReadFile(fmt.Sprintf("i18n/locale.%s.json", lang))
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "couldn't parse lang file for %s", lang)
+		_, _ = fmt.Fprintf(os.Stderr, "couldn't read locale file for %s", lang)
 		panic(err)
 	}
-	json.Unmarshal(file, &locale)
-	I18n = func(key string) string {
+	err = json.Unmarshal(file, &locale)
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "couldn't parse locale file for %s", lang)
+		panic(err)
+	}
+
+	var commands map[string]string
+	file, err = i18nEmbed.ReadFile(fmt.Sprintf("i18n/commands.%s.json", lang))
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "couldn't read commands file for %s", lang)
+		panic(err)
+	}
+	err = json.Unmarshal(file, &commands)
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "couldn't parse commands file for %s", lang)
+		panic(err)
+	}
+
+	I18nFormat = func(key string) string {
 		value, has := locale[key]
 		if has {
 			return value
@@ -56,6 +62,15 @@ func initI18n(lang string) {
 			return key
 		}
 	}
+	I18nLookupCommand = func(key string) string {
+		value, has := commands[key]
+		if has {
+			return value
+		} else {
+			return key
+		}
+	}
+
 }
 
 func main() {
@@ -65,6 +80,7 @@ func main() {
 	}
 
 	mainLog := waLog.Stdout("Main", logLevel, true)
+	botLog := waLog.Stdout("Bot", logLevel, true)
 	loginLog := waLog.Stdout("Login", logLevel, true)
 	dbLog := waLog.Stdout("Database", logLevel, true)
 	clientLog := waLog.Stdout("Client", logLevel, true)
@@ -76,6 +92,11 @@ func main() {
 	}
 
 	initI18n(config.Lang)
+
+	RandSource, err = os.OpenFile("/dev/urandom", os.O_RDONLY, 0)
+	if err != nil {
+		panic(err)
+	}
 
 	mainLog.Infof("starting up")
 
@@ -101,7 +122,7 @@ func main() {
 		panic(err)
 	}
 	err = migrations.Up()
-	if err != nil {
+	if err != nil && err != migrate.ErrNoChange {
 		panic(err)
 	}
 
@@ -114,6 +135,6 @@ func main() {
 	dbLog.Infof("database up")
 
 	for {
-		Bot(mainLog, loginLog, clientLog, qrLog, (*SqlDB)(db), container, config)
+		Bot(botLog, loginLog, clientLog, qrLog, (*SqlDB)(db), container, config)
 	}
 }
