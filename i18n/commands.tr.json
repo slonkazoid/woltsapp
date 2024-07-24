@@ -1,3 +1,4 @@
 {
-	"grupEkle": "addGroup"
+	"grupEkle": "addGroup",
+	"grupSil": "removeGroup"
 }
