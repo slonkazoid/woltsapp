@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"regexp"
 	"strings"
 	"time"
 
@@ -13,6 +14,8 @@ import (
 	"go.mau.fi/whatsmeow/types/events"
 	"google.golang.org/protobuf/proto"
 )
+
+var isMac48 *regexp.Regexp = regexp.MustCompile("^([0-9a-fA-F]{2}[-:]){5}[0-9a-fA-F]{2}$")
 
 func FormatHttpAddr(addr string) (string, error) {
 	resolved_addr, err := net.ResolveTCPAddr("tcp", addr)
@@ -62,5 +65,9 @@ func Reply(client *whatsmeow.Client, message *events.Message, body string) (what
 			},
 		},
 	})
+}
 
+func IsMac48(addr string) bool {
+	// TODO: maybe more
+	return isMac48.Match([]byte(addr))
 }

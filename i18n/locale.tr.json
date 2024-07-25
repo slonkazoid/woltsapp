@@ -6,5 +6,9 @@
 	"groupExists": "Grup zaten eklendi",
 	"groupAdded": "Grup eklendi",
 	"groupNotFound": "Group bulunamadı",
-	"groupRemoved": "Group kaldırıldı"
+	"groupRemoved": "Group kaldırıldı",
+	"hostUnspecified": "Tanımlanmış isim veya MAC adresi ile cihaz belirtmeniz gerek",
+	"unknownHost": "Bilinmeyen cihaz ismi",
+	"mistypeMac": "(MAC adresini yanlış mı girdiniz?)",
+	"wolSent": "Wake-on-LAN sihirli paketi gönderildi"
 }

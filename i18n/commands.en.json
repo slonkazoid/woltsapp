@@ -1,4 +1,7 @@
 {
+	"help": "help",
 	"addGroup": "addGroup",
-	"removeGroup": "removeGroup"
+	"removeGroup": "removeGroup",
+	"wake": "wake",
+	"wol": "wol"
 }

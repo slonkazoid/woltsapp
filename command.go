@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/types/events"
@@ -13,6 +15,8 @@ type CommandMap map[string]CommandFunc
 var Commands CommandMap = CommandMap{
 	"addGroup":    addGroup,
 	"removeGroup": removeGroup,
+	"wake":        wake,
+	"wol":         wake,
 }
 
 func addGroup(argv []string, argc int, permissionLevel int, message *events.Message, client *whatsmeow.Client, db *SqlDB, config *Config, logger waLog.Logger) error {
@@ -49,5 +53,37 @@ func removeGroup(argv []string, argc int, permissionLevel int, message *events.M
 
 	logger.Infof("group removed")
 	_, err = Reply(client, message, I18nFormat("groupRemoved"))
+	return err
+}
+
+func wake(argv []string, argc int, permissionLevel int, message *events.Message, client *whatsmeow.Client, db *SqlDB, config *Config, logger waLog.Logger) error {
+	if argc < 2 {
+		logger.Errorf("host not specified")
+		_, err := Reply(client, message, I18nFormat("hostUnspecified"))
+		return err
+	}
+
+	var addr string
+	if IsMac48(argv[1]) {
+		addr = argv[1]
+	} else {
+		found, has, err := db.LookupHost(argv[1])
+		if err != nil {
+			return err
+		} else if !has {
+			logger.Errorf("unknown hostname: %#v", argv[1])
+			_, err := Reply(client, message, fmt.Sprintf("%s: %#v\n%s", I18nFormat("unknownHost"), argv[1], I18nFormat("mistypeMac")))
+			return err
+		}
+		addr = found
+	}
+
+	err := WakeByMacString(addr)
+	if err != nil {
+		return err
+	}
+
+	logger.Infof("wakeup sent")
+	_, err = Reply(client, message, I18nFormat("wolSent"))
 	return err
 }

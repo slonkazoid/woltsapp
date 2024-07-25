@@ -6,5 +6,9 @@
 	"groupExists": "Group is already added",
 	"groupAdded": "Group added",
 	"groupNotFound": "Group not found",
-	"groupRemoved": "Group removed"
+	"groupRemoved": "Group removed",
+	"hostUnspecified": "You must specify a host via a defined hostname or MAC address",
+	"unknownHost": "Unkown hostname",
+	"mistypeMac": "(did you mistype a MAC address?)",
+	"wolSent": "Wake-on-LAN magic packet sent"
 }

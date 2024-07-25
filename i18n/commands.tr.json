@@ -1,4 +1,7 @@
 {
+	"yardim": "help",
 	"grupEkle": "addGroup",
-	"grupSil": "removeGroup"
+	"grupSil": "removeGroup",
+	"uyandir": "wake",
+	"wol": "wol"
 }
