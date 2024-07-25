@@ -1,8 +1,8 @@
 {
 	"yardim": "help",
-	"grupEkle": "addGroup",
-	"grupSil": "removeGroup",
+	"grupekle": "addgroup",
+	"grupsil": "removegroup",
 	"uyandir": "wake",
 	"wol": "wol",
-	"isimEkle": "addHost"
+	"isimekle": "addhost"
 }

@@ -102,7 +102,7 @@ func processMessage(message *events.Message, client *whatsmeow.Client, db *SqlDB
 	}
 
 	cmdLog.Debugf("before lookup: %#v", argv[0])
-	argv[0] = I18nLookupCommand(argv[0])
+	argv[0] = strings.ToLower(I18nLookupCommand(argv[0]))
 	cmdLog.Infof("command %#v by %s", argv[0], sender)
 	cmdLog.Debugf("argc %d argv %#v", argc, argv)
 	exec := Commands[argv[0]]

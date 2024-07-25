@@ -13,11 +13,11 @@ type CommandFunc func([]string, int, int, *events.Message, *whatsmeow.Client, *S
 type CommandMap map[string]CommandFunc
 
 var Commands CommandMap = CommandMap{
-	"addGroup":    addGroup,
-	"removeGroup": removeGroup,
+	"addgroup":    addGroup,
+	"removegroup": removeGroup,
 	"wake":        wake,
 	"wol":         wake,
-	"addHost":     addHost,
+	"addhost":     addHost,
 }
 
 func addGroup(argv []string, argc int, permissionLevel int, message *events.Message, client *whatsmeow.Client, db *SqlDB, config *Config, logger waLog.Logger) error {

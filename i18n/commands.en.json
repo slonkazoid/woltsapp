@@ -1,8 +1,8 @@
 {
 	"help": "help",
-	"addGroup": "addGroup",
-	"removeGroup": "removeGroup",
+	"addgroup": "addgroup",
+	"removegroup": "removegroup",
 	"wake": "wake",
 	"wol": "wol",
-	"addHost": "addHost"
+	"addhost": "addhost"
 }
