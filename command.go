@@ -18,6 +18,7 @@ var Commands CommandMap = CommandMap{
 	"wake":        wake,
 	"wol":         wake,
 	"addhost":     addHost,
+	"removehost":  removeHost,
 }
 
 func addGroup(argv []string, argc int, permissionLevel int, message *events.Message, client *whatsmeow.Client, db *SqlDB, config *Config, logger waLog.Logger) error {
@@ -128,5 +129,28 @@ func addHost(argv []string, argc int, permissionLevel int, message *events.Messa
 
 	logger.Infof("host added")
 	_, err = Reply(client, message, I18nFormat("hostAdded"))
+	return err
+}
+
+func removeHost(argv []string, argc int, permissionLevel int, message *events.Message, client *whatsmeow.Client, db *SqlDB, config *Config, logger waLog.Logger) error {
+	if argc < 2 {
+		logger.Errorf("hostname not specified")
+		_, err := Reply(client, message, I18nFormat("nameUnspecified"))
+		return err
+	}
+
+	res, err := db.DeleteHost(argv[1])
+	if err != nil {
+		return err
+	}
+	rowsAffected, _ := res.RowsAffected()
+	if rowsAffected == 0 {
+		logger.Warnf("hostname not found")
+		_, err = Reply(client, message, I18nFormat("unknownHost"))
+		return err
+	}
+
+	logger.Infof("host removed")
+	_, err = Reply(client, message, I18nFormat("hostRemoved"))
 	return err
 }

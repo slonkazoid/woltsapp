@@ -47,3 +47,8 @@ func (recv *SqlDB) UpsertHost(mac string, name string) (sql.Result, error) {
 	db := (*sql.DB)(recv)
 	return db.Exec("INSERT INTO defined_hosts (name, mac_address) VALUES (?, ?) ON CONFLICT (name) DO UPDATE SET mac_address=excluded.mac_address;", mac, name)
 }
+
+func (recv *SqlDB) DeleteHost(name string) (sql.Result, error) {
+	db := (*sql.DB)(recv)
+	return db.Exec("DELETE FROM defined_hosts WHERE name=?;", name)
+}

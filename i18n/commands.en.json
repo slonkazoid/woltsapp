@@ -4,5 +4,6 @@
 	"removegroup": "removegroup",
 	"wake": "wake",
 	"wol": "wol",
-	"addhost": "addhost"
+	"addhost": "addhost",
+	"removehost": "removehost"
 }

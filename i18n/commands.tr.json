@@ -4,5 +4,6 @@
 	"grupsil": "removegroup",
 	"uyandir": "wake",
 	"wol": "wol",
-	"isimekle": "addhost"
+	"isimekle": "addhost",
+	"isimsil": "removegroup"
 }

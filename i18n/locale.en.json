@@ -18,5 +18,6 @@
 	"macFormat": "expected: 55-66-77-88-99-00 or 55:66:77:88:99:00",
 	"nameFormat": "expected: 2-36 characters consisting of lowercase letters, numbers and '-'",
 	"hostAdded": "Host added",
-	"permissionDenied": "You are not authorized to use this command"
+	"permissionDenied": "You are not authorized to use this command",
+	"hostRemoved": "Host removed"
 }

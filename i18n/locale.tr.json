@@ -18,5 +18,6 @@
 	"macFormat": "beklenen: 55-66-77-88-99-00 ya da 55:66:77:88:99:00",
 	"nameFormat": "beklenen: küçük harfler, rakamlar, ve '-' karakterinden oluşup 2-36 karakter uzunluğunda olmalı",
 	"hostAdded": "İsim eklendi",
-	"permissionDenied": "Bu komudu kullanmak için izniniz yok"
+	"permissionDenied": "Bu komudu kullanmak için izniniz yok",
+	"hostRemoved": "İsim silindi"
 }
