@@ -9,6 +9,14 @@
 	"groupRemoved": "Group removed",
 	"hostUnspecified": "You must specify a host via a defined hostname or MAC address",
 	"unknownHost": "Unkown hostname",
-	"mistypeMac": "(did you mistype a MAC address?)",
-	"wolSent": "Wake-on-LAN magic packet sent"
+	"mistypeMac": "did you mistype a MAC address?",
+	"wolSent": "Wake-on-LAN magic packet sent",
+	"macUnspecified": "Expected MAC address",
+	"nameUnspecified": "Expected new name",
+	"macInvalid": "Invalid MAC address",
+	"nameInvalid": "Invalid hostname",
+	"macFormat": "expected: 55-66-77-88-99-00 or 55:66:77:88:99:00",
+	"nameFormat": "expected: 2-36 characters consisting of lowercase letters, numbers and '-'",
+	"hostAdded": "Host added",
+	"permissionDenied": "You are not authorized to use this command"
 }

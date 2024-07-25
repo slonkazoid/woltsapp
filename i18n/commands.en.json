@@ -3,5 +3,6 @@
 	"addGroup": "addGroup",
 	"removeGroup": "removeGroup",
 	"wake": "wake",
-	"wol": "wol"
+	"wol": "wol",
+	"addHost": "addHost"
 }

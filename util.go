@@ -16,6 +16,7 @@ import (
 )
 
 var isMac48 *regexp.Regexp = regexp.MustCompile("^([0-9a-fA-F]{2}[-:]){5}[0-9a-fA-F]{2}$")
+var isValidHostname *regexp.Regexp = regexp.MustCompile("^[0-9a-f-]{2,36}$")
 
 func FormatHttpAddr(addr string) (string, error) {
 	resolved_addr, err := net.ResolveTCPAddr("tcp", addr)
@@ -68,6 +69,9 @@ func Reply(client *whatsmeow.Client, message *events.Message, body string) (what
 }
 
 func IsMac48(addr string) bool {
-	// TODO: maybe more
 	return isMac48.Match([]byte(addr))
+}
+
+func IsValidHostname(name string) bool {
+	return isValidHostname.Match([]byte(name))
 }

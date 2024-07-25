@@ -45,5 +45,5 @@ func (recv *SqlDB) LookupHost(name string) (string, bool, error) {
 
 func (recv *SqlDB) UpsertHost(mac string, name string) (sql.Result, error) {
 	db := (*sql.DB)(recv)
-	return db.Exec("UPSERT INTO defined_hosts (name, mac_addres) VALUES (?, ?);", mac, name)
+	return db.Exec("INSERT INTO defined_hosts (name, mac_address) VALUES (?, ?) ON CONFLICT (name) DO UPDATE SET mac_address=excluded.mac_address;", mac, name)
 }

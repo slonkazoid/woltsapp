@@ -3,5 +3,6 @@
 	"grupEkle": "addGroup",
 	"grupSil": "removeGroup",
 	"uyandir": "wake",
-	"wol": "wol"
+	"wol": "wol",
+	"isimEkle": "addHost"
 }

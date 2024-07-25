@@ -17,11 +17,17 @@ var Commands CommandMap = CommandMap{
 	"removeGroup": removeGroup,
 	"wake":        wake,
 	"wol":         wake,
+	"addHost":     addHost,
 }
 
 func addGroup(argv []string, argc int, permissionLevel int, message *events.Message, client *whatsmeow.Client, db *SqlDB, config *Config, logger waLog.Logger) error {
-	_, err := db.InsertGroup(message.Info.Chat.String())
+	if permissionLevel < 2 {
+		logger.Errorf("permission denied")
+		_, err := Reply(client, message, I18nFormat("permissionDenied"))
+		return err
+	}
 
+	_, err := db.InsertGroup(message.Info.Chat.String())
 	sqliteError, ok := err.(sqlite3.Error)
 	if ok && sqliteError.ExtendedCode == sqlite3.ErrConstraintUnique {
 		logger.Warnf("group already added")
@@ -40,6 +46,12 @@ func addGroup(argv []string, argc int, permissionLevel int, message *events.Mess
 }
 
 func removeGroup(argv []string, argc int, permissionLevel int, message *events.Message, client *whatsmeow.Client, db *SqlDB, config *Config, logger waLog.Logger) error {
+	if permissionLevel < 2 {
+		logger.Errorf("permission denied")
+		_, err := Reply(client, message, I18nFormat("permissionDenied"))
+		return err
+	}
+
 	res, err := db.DeleteGroup(message.Info.Chat.String())
 	if err != nil {
 		return err
@@ -85,5 +97,36 @@ func wake(argv []string, argc int, permissionLevel int, message *events.Message,
 
 	logger.Infof("wakeup sent")
 	_, err = Reply(client, message, I18nFormat("wolSent"))
+	return err
+}
+
+func addHost(argv []string, argc int, permissionLevel int, message *events.Message, client *whatsmeow.Client, db *SqlDB, config *Config, logger waLog.Logger) error {
+	if argc == 2 {
+		logger.Errorf("mac not specified")
+		_, err := Reply(client, message, I18nFormat("macUnspecified"))
+		return err
+	} else if argc < 3 {
+		logger.Errorf("hostname not specified")
+		_, err := Reply(client, message, I18nFormat("nameUnspecified"))
+		return err
+	}
+
+	if !IsValidHostname(argv[1]) {
+		logger.Errorf("invalid hostnamed")
+		_, err := Reply(client, message, fmt.Sprintf("%s: %#v\n(%s)", I18nFormat("nameInvalid"), argv[1], I18nFormat("nameFormat")))
+		return err
+	} else if !IsMac48(argv[2]) {
+		logger.Errorf("mac not specified")
+		_, err := Reply(client, message, fmt.Sprintf("%s: %#v\n(%s)", I18nFormat("macInvalid"), argv[2], I18nFormat("macFormat")))
+		return err
+	}
+
+	_, err := db.UpsertHost(argv[1], argv[2])
+	if err != nil {
+		return err
+	}
+
+	logger.Infof("host added")
+	_, err = Reply(client, message, I18nFormat("hostAdded"))
 	return err
 }
