@@ -2,6 +2,9 @@
 
 WhatsApp Wake-on-LAN (WoL) bot
 
+this is my first ever project in golang so don't expect
+code quality or correctness
+
 ## Building
 
 ```sh
@@ -19,3 +22,8 @@ with the exception of LOG_LEVEL:
 (default: `INFO`)
 
 see `woltsapp -help` for more information
+
+## TODO
+
+- [ ] update command
+- [ ] better documentation
