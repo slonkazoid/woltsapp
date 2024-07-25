@@ -27,3 +27,11 @@ see `woltsapp -help` for more information
 
 - [ ] update command
 - [ ] better documentation
+
+## License
+
+woltsapp is licensed under the [MIT License](LICENSE)
+
+[whatsmeow](https://github.com/tulir/whatsmeow) is licensed under the
+[Mozilla Public License 2.0](https://github.com/tulir/whatsmeow/blob/main/LICENSE)  
+Copyright The whatsmeow Contributors
