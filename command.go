@@ -84,7 +84,7 @@ func wake(argv []string, argc int, permissionLevel int, message *events.Message,
 			return err
 		} else if !has {
 			logger.Errorf("unknown hostname: %#v", argv[1])
-			_, err := Reply(client, message, fmt.Sprintf("%s: %#v\n%s", I18nFormat("unknownHost"), argv[1], I18nFormat("mistypeMac")))
+			_, err := Reply(client, message, fmt.Sprintf("%s: %#v\n(%s)", I18nFormat("unknownHost"), argv[1], I18nFormat("mistypeMac")))
 			return err
 		}
 		addr = found
@@ -112,7 +112,7 @@ func addHost(argv []string, argc int, permissionLevel int, message *events.Messa
 	}
 
 	if !IsValidHostname(argv[1]) {
-		logger.Errorf("invalid hostnamed")
+		logger.Errorf("invalid hostname")
 		_, err := Reply(client, message, fmt.Sprintf("%s: %#v\n(%s)", I18nFormat("nameInvalid"), argv[1], I18nFormat("nameFormat")))
 		return err
 	} else if !IsMac48(argv[2]) {
