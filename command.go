@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
@@ -20,6 +21,7 @@ var Commands CommandMap = CommandMap{
 	"wol":         wake,
 	"addhost":     addHost,
 	"removehost":  removeHost,
+	"hosts":       listHosts,
 }
 
 func help(argv []string, argc int, permissionLevel int, message *events.Message, client *whatsmeow.Client, db *SqlDB, config *Config, logger waLog.Logger) error {
@@ -158,5 +160,20 @@ func removeHost(argv []string, argc int, permissionLevel int, message *events.Me
 
 	logger.Infof("host removed")
 	_, err = Reply(client, message, I18nFormat("hostRemoved"))
+	return err
+}
+
+func listHosts(argv []string, argc int, permissionLevel int, message *events.Message, client *whatsmeow.Client, db *SqlDB, config *Config, logger waLog.Logger) error {
+	res, err := db.SelectHosts()
+	if err != nil {
+		return err
+	}
+
+	str := ""
+	for k, v := range res {
+		str += fmt.Sprintf("`%s` *%s*\n", v, k)
+	}
+
+	_, err = Reply(client, message, strings.TrimRight(str, "\n"))
 	return err
 }
