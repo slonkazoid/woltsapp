@@ -16,7 +16,7 @@ import (
 )
 
 var isMac48 *regexp.Regexp = regexp.MustCompile("^([0-9a-fA-F]{2}[-:]){5}[0-9a-fA-F]{2}$")
-var isValidHostname *regexp.Regexp = regexp.MustCompile("^[0-9a-z-]{2,36}$")
+var isValidHostname *regexp.Regexp = regexp.MustCompile("^[0-9a-z-]{1,36}$")
 
 func FormatHttpAddr(addr string) (string, error) {
 	resolved_addr, err := net.ResolveTCPAddr("tcp", addr)

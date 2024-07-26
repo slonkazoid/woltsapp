@@ -14,7 +14,7 @@
 	"macUnspecified": "MAC adresi gerekli",
 	"nameUnspecified": "Yeni isim gerekli",
 	"macInvalid": "MAC adresi beklenen formatta değil: %#v\n(beklenen: 55-66-77-88-99-00 ya da 55:66:77:88:99:00)",
-	"nameInvalid": "Cihaz ismi beklenen formatta değil: %#v\n(beklenen: küçük harfler, rakamlar, ve '-' karakterinden oluşup 2-36 karakter uzunluğunda olmalı)",
+	"nameInvalid": "Cihaz ismi beklenen formatta değil: %#v\n(beklenen: küçük harfler, rakamlar, ve '-' karakterinden oluşup 1-36 karakter uzunluğunda olmalı)",
 	"hostAdded": "İsim eklendi",
 	"permissionDenied": "Bu komudu kullanmak için izniniz yok",
 	"hostRemoved": "İsim silindi"
