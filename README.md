@@ -25,7 +25,7 @@ see `woltsapp -help` for more information
 
 ## Usage
 
-see [i18n/help.en.txt](i18n/help.en.txt) for a list of commands.  
+see [i18n/help.en.md](i18n/help.en.md) for a list of commands.  
 the default prefix is `w.`
 
 ## TODO

@@ -16,7 +16,7 @@ var I18nLookupCommand func(key string) string
 //go:embed i18n
 var i18nEmbed embed.FS
 
-var txtRegex *regexp.Regexp = regexp.MustCompile(`^([\w\d-_]+)\.([\w\d-_]+)\.txt$`)
+var txtRegex *regexp.Regexp = regexp.MustCompile(`^([\w\d-_]+)\.([\w\d-_]+)\.(txt|md)$`)
 
 func InitI18n(lang string) {
 	var locale map[string]string
