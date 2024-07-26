@@ -6,7 +6,7 @@ type woltsapp struct {
 	HTTP_Addr string `default:":8000"`
 	Lang      string `default:"en"`
 	DB_URL    string `default:"file:store.db?_foreign_keys=on&_journal_mode=WAL"`
-	Prefix    string `default:"!"`
+	Prefix    string `default:"w."`
 }
 
 type Config woltsapp

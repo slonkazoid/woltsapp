@@ -16,12 +16,17 @@ go build .
 ## Configuration
 
 configuration is done via environment variables and command line arguments,
-with the exception of LOG_LEVEL:
+with the exception of LOG_LEVEL, which is only available as an env. variable:
 
 `LOG_LEVEL`: minimum log level, one of `DEBUG`, `INFO`, `WARN`, `ERROR`
 (default: `INFO`)
 
 see `woltsapp -help` for more information
+
+## Usage
+
+see [i18n/help.en.txt](i18n/help.en.txt) for a list of commands.  
+the default prefix is `w.`
 
 ## TODO
 
