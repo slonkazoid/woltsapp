@@ -19,6 +19,5 @@
 	"nameFormat": "expected: 2-36 characters consisting of lowercase letters, numbers and '-'",
 	"hostAdded": "Host added",
 	"permissionDenied": "You are not authorized to use this command",
-	"hostRemoved": "Host removed",
-	"help": "*woltsapp* - WhatsApp Wake-on-LAN (WoL) bot\n\nCommands:\n  - *`help`*: print this help page\n  - *`addGroup`*: allowlist the current group so commands can be run here\n  - *`removeGroup`*: remove the group from the allowlist\n  - *`wake|wol`* `<hostname or MAC>`: send a WoL magic packet to the specified host\n  - *`addHost`* `<name>` `<MAC>`: add an alias for a mac address\n  - *`removeHost`* `<name>`: remove an alias"
+	"hostRemoved": "Host removed"
 }

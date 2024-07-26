@@ -3,8 +3,6 @@ package main
 import (
 	"database/sql"
 	"embed"
-	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 
@@ -18,60 +16,10 @@ import (
 
 type SqlDB sql.DB
 
-var I18nFormat func(key string) string
-var I18nLookupCommand func(key string) string
-
-//go:embed i18n
-var i18nEmbed embed.FS
-
 //go:embed migrate
 var migrateEmbed embed.FS
 
 var RandSource io.Reader
-
-func initI18n(lang string) {
-	var locale map[string]string
-	file, err := i18nEmbed.ReadFile(fmt.Sprintf("i18n/locale.%s.json", lang))
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "couldn't read locale file for %s", lang)
-		panic(err)
-	}
-	err = json.Unmarshal(file, &locale)
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "couldn't parse locale file for %s", lang)
-		panic(err)
-	}
-
-	var commands map[string]string
-	file, err = i18nEmbed.ReadFile(fmt.Sprintf("i18n/commands.%s.json", lang))
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "couldn't read commands file for %s", lang)
-		panic(err)
-	}
-	err = json.Unmarshal(file, &commands)
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "couldn't parse commands file for %s", lang)
-		panic(err)
-	}
-
-	I18nFormat = func(key string) string {
-		value, has := locale[key]
-		if has {
-			return value
-		} else {
-			return key
-		}
-	}
-	I18nLookupCommand = func(key string) string {
-		value, has := commands[key]
-		if has {
-			return value
-		} else {
-			return key
-		}
-	}
-
-}
 
 func main() {
 	logLevel, hasLevel := os.LookupEnv("LOG_LEVEL")
@@ -91,7 +39,7 @@ func main() {
 		panic(err)
 	}
 
-	initI18n(config.Lang)
+	InitI18n(config.Lang)
 
 	RandSource, err = os.OpenFile("/dev/urandom", os.O_RDONLY, 0)
 	if err != nil {

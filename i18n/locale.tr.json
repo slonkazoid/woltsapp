@@ -19,6 +19,5 @@
 	"nameFormat": "beklenen: küçük harfler, rakamlar, ve '-' karakterinden oluşup 2-36 karakter uzunluğunda olmalı",
 	"hostAdded": "İsim eklendi",
 	"permissionDenied": "Bu komudu kullanmak için izniniz yok",
-	"hostRemoved": "İsim silindi",
-	"help": "*woltsapp* - WhatsApp Wake-on-LAN (WoL) botu\n\nKomutlar:\n  - *`yardim`*: bu yardım sayfasını yazdır\n  - *`grupEkle`*: komutların çalıştırılabilmesi için grubu izin listesine ekle\n  - *`grupSil`*: grubu izin listesinden kaldırır\n  - *`uyandir|wol`* `<hostname or MAC>`: belirtilen cihaza WoL sihirli paketi gönder\n  - *`isimEkle`* `<name>` `<MAC>`: bir MAC adresi için takma isim ekle\n  - *`isimSil`* `<name>`: bir takma ismi sil\n  - *`isimler`*: tüm isimleri listele"
+	"hostRemoved": "İsim silindi"
 }
