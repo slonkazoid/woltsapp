@@ -122,11 +122,11 @@ func addHost(argv []string, argc int, permissionLevel int, message *events.Messa
 
 	if !IsValidHostname(argv[1]) {
 		logger.Errorf("invalid hostname")
-		_, err := Reply(client, message, fmt.Sprintf("%s: %#v\n(%s)", I18nFormat("nameInvalid"), argv[1], I18nFormat("nameFormat")))
+		_, err := Reply(client, message, I18nFormat("nameInvalid", argv[1]))
 		return err
 	} else if !IsMac48(argv[2]) {
 		logger.Errorf("mac not specified")
-		_, err := Reply(client, message, fmt.Sprintf("%s: %#v\n(%s)", I18nFormat("macInvalid"), argv[2], I18nFormat("macFormat")))
+		_, err := Reply(client, message, I18nFormat("macInvalid", argv[2]))
 		return err
 	}
 

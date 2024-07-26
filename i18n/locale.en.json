@@ -13,10 +13,8 @@
 	"wolSent": "Wake-on-LAN magic packet sent",
 	"macUnspecified": "Expected MAC address",
 	"nameUnspecified": "Expected new name",
-	"macInvalid": "Invalid MAC address",
-	"nameInvalid": "Invalid hostname",
-	"macFormat": "expected: 55-66-77-88-99-00 or 55:66:77:88:99:00",
-	"nameFormat": "expected: 2-36 characters consisting of lowercase letters, numbers and '-'",
+	"macInvalid": "Invalid MAC address: %#v\n(expected: 55-66-77-88-99-00 or 55:66:77:88:99:00)",
+	"nameInvalid": "Invalid hostname: %#v\n(expected: 2-36 characters consisting of lowercase letters, numbers and '-')",
 	"hostAdded": "Host added",
 	"permissionDenied": "You are not authorized to use this command",
 	"hostRemoved": "Host removed"
