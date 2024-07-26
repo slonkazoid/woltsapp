@@ -2,7 +2,7 @@
 	"scanHeader": "Aşağıdaki QR kodunu WhatsApp'ta okutunuz",
 	"done": "Giriş yapıldı",
 	"commandNotFound": "Komut bulunamadı",
-	"commandError": "Komut çalıştırılırken hata oluştu",
+	"commandError": "Komut çalıştırılırken hata oluştu: %v",
 	"groupExists": "Grup zaten eklendi",
 	"groupAdded": "Grup eklendi",
 	"groupNotFound": "Group bulunamadı",

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
@@ -113,7 +112,7 @@ func processMessage(message *events.Message, client *whatsmeow.Client, db *SqlDB
 	err := exec(argv, argc, permissionLevel, message, client, db, config, cmdLog)
 	if err != nil {
 		cmdLog.Errorf("error while executing command: %v", err)
-		_, err := Reply(client, message, fmt.Sprintf("%s: `%v`", I18nFormat("commandError"), err))
+		_, err := Reply(client, message, I18nFormat("commandError", err))
 		if err != nil {
 			cmdLog.Errorf("error while reporting error: %v", err)
 		}
